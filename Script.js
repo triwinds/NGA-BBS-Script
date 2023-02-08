@@ -270,6 +270,7 @@
          * @param {String} msg 自定义消息信息
          */
         saveSetting (msg='保存配置成功，刷新页面生效') {
+            console.log("saveSetting" + msg)
             for (let k in this.setting.normal) {
                 $('input#hld__cb_' + k).length > 0 && (this.setting.normal[k] = $('input#hld__cb_' + k)[0].checked)
             }
@@ -379,7 +380,7 @@
                     if (cv_mid > lv_mid) {
                         const focus = ''
                         $('body').append(`<div id="hld__updated" class="animated-1s bounce"><p><a href="javascript:void(0)" class="hld__setting-close">×</a><b>NGA-Script已更新至v${GM_info.script.version}</b></p>${focus}<p><a class="hld__readme" href="https://greasyfork.org/zh-CN/scripts/393991-nga%E4%BC%98%E5%8C%96%E6%91%B8%E9%B1%BC%E4%BD%93%E9%AA%8C" target="_blank">查看更新内容</a></p></div>`)
-                        $('body').on('click', '#hld__updated a', function () {
+                        $('#hld__updated a').on('click', function () {
                             $(this).parents('#hld__updated').remove()
                             window.localStorage.setItem('hld__NGA_version', GM_info.script.version)
                         })
@@ -489,6 +490,7 @@
     const settingPanel = {
         name: 'settingPanel',
         initFunc: function () {
+            console.log("init settingPanel")
             const _this = this
             //设置面板
             let $panelDom = $(`
@@ -619,7 +621,7 @@
              * Bind:Click
              * 设置面板-展开切换高级设置
              */
-            $('body').on('click', '#hld__advanced_button', function () {
+            $('#hld__advanced_button').on('click', function () {
                 if ($('.hld__advanced-setting-panel').is(':hidden')) {
                     $('.hld__advanced-setting-panel').css('display', 'flex')
                     $(this).text('-')
@@ -632,14 +634,18 @@
              * Bind:Click
              * 关闭面板（通用）
              */
-            $('body').on('click', '.hld__list-panel .hld__setting-close', function () {
+            $('.hld__list-panel .hld__setting-close').on('click', function () {
                 $(this).parent().remove()
             })
             /**
              * Bind:Click
              * 保存配置
              */
-            $('body').on('click', '#hld__save__data', () => {
+            $('#hld__save__data').on('click', () => {
+                script.saveSetting()
+                $('#hld__setting_cover').fadeOut(200)
+            })
+            $('#hld__save__data').on('click', () => {
                 script.saveSetting()
                 $('#hld__setting_cover').fadeOut(200)
             })
@@ -749,7 +755,7 @@
              * Bind:Click
              * 快捷键编辑面板
              */
-            $('body').on('click', '#hld__shortcut_manage', () => {
+            $('#hld__shortcut_manage').on('click', () => {
                 if($('#hld__shortcut_panel').length > 0) return
                 let $shortcutPanel = $(`<div id="hld__shortcut_panel" class="hld__list-panel animated fadeInUp">
                 <a href="javascript:void(0)" class="hld__setting-close">×</a>
@@ -783,7 +789,7 @@
              * Bind:Click
              * 重置快捷键
              */
-            $('body').on('click', '#hld__reset_shortcut', () => {
+            $('#hld__reset_shortcut').on('click', () => {
                 const defaultShortcut = []
                 for (const module of script.modules) {
                     if (module.setting && module.setting.shortCutCode) {
@@ -803,7 +809,7 @@
              * Bind:Click
              * 保存快捷键
              */
-            $('body').on('click', '#hld__save_shortcut', () => {
+            $('#hld__save_shortcut').on('click', () => {
                 const _this = this
                 let shortcutKeys = []
                 $('.hld__table tbody>tr').each(function () {
@@ -887,7 +893,7 @@
              * Bind:Click
              * 导入导出面板
              */
-            $('body').on('click', '#hld__backup_panel', function () {
+            $('#hld__backup_panel').on('click', function () {
                 const unsupported = '3.3.0'
                 const currentVer = script.getInfo().version
                 if($('#hld__export_panel').length > 0) return
@@ -1045,7 +1051,7 @@
              * Bind:Click
              * 打赏面板
              */
-            $('body').on('click', '#hld__reward', function () {
+            $('#hld__reward').on('click', function () {
                 $('#hld__setting_cover').append(`
                 <div class="hld__list-panel hld__reward-panel animated fadeInUp">
                     <a href="javascript:void(0)" class="hld__setting-close">×</a>
@@ -2194,7 +2200,7 @@
              * Bind:Click
              * 管理弹窗面板
              */
-            $('body').on('click', '#hld__keywords_manage', function () {
+            $('#hld__keywords_manage').on('click', function () {
                 if($('#hld__keywords_panel').length > 0) return
                 $('#hld__setting_cover').append(`<div id="hld__keywords_panel" class="hld__list-panel animated fadeInUp">
                 <a href="javascript:void(0)" class="hld__setting-close">×</a>
@@ -2209,7 +2215,7 @@
              * Bind:Click
              * 保存关键字
              */
-            $('body').on('click', '#hld__save_keywords', function () {
+            $('#hld__save_keywords').on('click', function () {
                 let keywordsList = $('#hld__keywords_list_textarea').val().split('\n')
                 keywordsList = _this.removeBlank(keywordsList)
                 keywordsList = _this.uniq(keywordsList)
@@ -2402,7 +2408,7 @@
                  * Bind:Click
                  * 操作按钮点击事件
                  */
-                $('body').on('click', '.hld__extra-icon', function () {
+                $('.hld__extra-icon').on('click', function () {
                     const type = $(this).data('type')
                     const name = $(this).data('name')
                     const uid = $(this).data('uid') + ''
@@ -2429,7 +2435,7 @@
                  * Bind:Click
                  * 屏蔽按钮
                  */
-                $('body').on('click', '.hld__banned-block', function(){
+                $('.hld__banned-block').on('click', function(){
                     if ($(this).parent().hasClass('quote')) {
                         $(this).parent().prev().show()
                         $(this).parent().hide()
@@ -2442,7 +2448,7 @@
                  * Bind:Click
                  * 名单管理
                  */
-                $('body').on('click', '#hld__list_manage', function () {
+                $('#hld__list_manage').on('click', function () {
                     if($('#hld__banlist_panel').length > 0) return
                     $('#hld__setting_cover').append(`<div id="hld__banlist_panel"  class="hld__list-panel animated fadeInUp">
                     <a href="javascript:void(0)" class="hld__setting-close">×</a>
@@ -2473,7 +2479,7 @@
                      * Bind:Click
                      * 切换选项卡
                      */
-                    $('body').on('click', '.hld__tab-header > span', function(){
+                    $('.hld__tab-header > span').on('click', function(){
                         $('.hld__tab-header > span, .hld__tab-content').removeClass('hld__table-active')
                         $(this).addClass('hld__table-active')
                         $('.hld__tab-content').eq($(this).index()).addClass('hld__table-active')
@@ -2482,7 +2488,7 @@
                      * Bind:Click
                      * 移除黑名单
                      */
-                    $('body').on('click', '.hld__bl-del', function(){
+                    $('.hld__bl-del').on('click', function(){
                         const index = $(this).data('index')
                         _this.banList.splice(index, 1)
                         window.localStorage.setItem('hld__NGA_ban_list', JSON.stringify(_this.banList))
@@ -2492,7 +2498,7 @@
                      * Bind:Click
                      * 添加黑名单
                      */
-                    $('body').on('click', '#hld__banlist_add_btn', function(){
+                    $('#hld__banlist_add_btn').on('click', function(){
                         _this.banlistPopup({
                             type: 'add',
                             name: $(this).data('name'),
@@ -2506,7 +2512,7 @@
                      * Bind:Click
                      * 保存黑名单
                      */
-                    $('body').on('click', '#hld__save_banlist', function(){
+                    $('#hld__save_banlist').on('click', function(){
                         const banList = $('#hld__ban_list_textarea').val()
                         const markList = $('#hld__mark_list_textarea').val()
                         try {
@@ -2531,7 +2537,7 @@
                      * Bind:Click
                      * 修改标记
                      */
-                    $('body').on('click', '.hld__ml-edit', function(){
+                    $('.hld__ml-edit').on('click', function(){
                         const name = $(this).data('name')
                         const uid = $(this).data('uid') + ''
                         _this.userMarkPopup({
@@ -2546,7 +2552,7 @@
                      * Bind:Click
                      * 删除标记
                      */
-                    $('body').on('click', '.hld__ml-del', function(){
+                    $('.hld__ml-del').on('click', function(){
                         const index = $(this).data('index')
                         _this.markList.splice(index, 1)
                         window.localStorage.setItem('hld__NGA_mark_list', JSON.stringify(_this.markList))
@@ -2556,7 +2562,7 @@
                      * Bind:Click
                      * 添加标记
                      */
-                    $('body').on('click', '#hld__marklist_add_btn', function(){
+                    $('#hld__marklist_add_btn').on('click', function(){
                         _this.userMarkPopup({
                             type: 'add',
                             name: $(this).data('name'),
@@ -2719,7 +2725,7 @@
         getBanUser: function (banObj) {
             const _this = this
             for (let u of _this.banList) {
-                if ((u.uid && banObj.uid && u.uid == banObj.uid) || 
+                if ((u.uid && banObj.uid && u.uid == banObj.uid) ||
                     (u.name && banObj.name && u.name == banObj.name)) {
                     if ((!u.uid && banObj.uid) || (!u.name && banObj.name)) {
                         u.uid = banObj.uid + '' || ''
@@ -2846,7 +2852,7 @@
          */
         getUserMarks: function (user) {
             const _this = this
-            const check = _this.markList.findIndex(v => (v.uid && user.uid && v.uid == user.uid) || 
+            const check = _this.markList.findIndex(v => (v.uid && user.uid && v.uid == user.uid) ||
             (v.name && user.name && v.name == user.name))
             if(check > -1) {
                 let userMark = _this.markList[check]
@@ -2868,7 +2874,7 @@
         setUserMarks: function (userMarks) {
             // 检查是否已有标签
             const _this = this
-            const check = _this.markList.findIndex(v => (v.uid && userMarks.uid && v.uid == userMarks.uid) || 
+            const check = _this.markList.findIndex(v => (v.uid && userMarks.uid && v.uid == userMarks.uid) ||
             (v.name && userMarks.name && v.name == userMarks.name))
             if(check > -1) {
                 if (userMarks.marks.length == 0) {
@@ -3048,7 +3054,7 @@
              * Bind:Click
              * 按钮点击事件
              */
-            $('body').on('click', '.hld__docker-btns>div', function () {
+            $('.hld__docker-btns>div').on('click', function () {
                 const type = $(this).data('type')
                 if (type == 'TOP') {
                     const $nav_link = $('#m_nav a.nav_link')
